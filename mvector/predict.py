@@ -26,7 +26,7 @@ class MVectorPredictor:
                  configs,
                  threshold=0.6,
                  label_path=None,
-                 model_path='model/',
+                 model_path='./model',
                  use_gpu=True):
         """
         声纹识别预测工具
@@ -49,7 +49,6 @@ class MVectorPredictor:
         if isinstance(configs, str):
             with open(configs, 'r', encoding='utf-8') as f:
                 configs = yaml.load(f.read(), Loader=yaml.FullLoader)
-            print_arguments(configs=configs)
         self.configs = dict_to_object(configs)
         assert 'max_duration' in self.configs.dataset_conf, \
             'You are using an old version of model which is no longer supported.'
@@ -106,7 +105,7 @@ class MVectorPredictor:
                 audios_path.append(os.path.join(audio_dir, file).replace('\\', '/'))
         # 声纹库没数据就跳过
         if len(audios_path) == 0: return
-        print("Loading label feature library...")
+        print("Loading voice feature library...")
         input_audios = []
         for audio_path in tqdm(audios_path):
             # 如果声纹特征已经在索引就跳过
@@ -134,7 +133,7 @@ class MVectorPredictor:
             else:
                 self.audio_feature = np.vstack((self.audio_feature, features))
         assert len(self.audio_feature) == len(self.users_name) == len(self.users_audio_path), 'Labels count conflict.'
-        print("Label feature library loaded successfully.")
+        print("Voice feature library loaded successfully.")
 
     # 声纹检索
     def __retrieval(self, np_feature):
