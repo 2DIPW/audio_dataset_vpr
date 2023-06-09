@@ -154,10 +154,18 @@ class MVectorPredictor:
             if len(candidate_label_list) == 0:
                 results.append({"label": None, "similarity": None})
             else:
-                max_label = max(candidate_label_list, key=candidate_label_list.count)
-                idx_for_max_label = [i for i, x in enumerate(self.users_name) if x == max_label]
-                similarity_for_max_label = max(abs_similarity[idx_for_max_label])
-                results.append({"label": max_label, "similarity": similarity_for_max_label})
+                #max_label = max(candidate_label_list, key=candidate_label_list.count)
+                # 这里做出的修改是考虑到如果有多个说话人命中的特征片段数量一样，原代码将会判定为顺序最靠前的说话人
+                # 修改成下面的代码后，将会判定为相似度最大的说话人
+                max_count = max(candidate_label_list.count(label) for label in candidate_label_list)
+                max_labels = [label for label in candidate_label_list if candidate_label_list.count(label) == max_count]
+                max_label_dict = {}
+                for max_label in max_labels:  # 对于每个命中的说话人
+                    idx_for_max_label = [i for i, x in enumerate(self.users_name) if x == max_label]  # 取其命中的片段的索引
+                    similarity_for_max_label = max(abs_similarity[idx_for_max_label])  # 取其命中的的所有片段中最大的相似度
+                    max_label_dict[max_label] = similarity_for_max_label
+                result_label = max(zip(max_label_dict.values(), max_label_dict.keys()))  # 判断相似度最大的说话人
+                results.append({"label": result_label[1], "similarity": result_label[0]})
         return results
 
     def _load_audio(self, audio_data, sample_rate=16000):
