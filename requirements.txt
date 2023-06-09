@@ -1,0 +1,10 @@
+av
+librosa
+numpy
+pyyaml
+tqdm
+resampy
+scikit_learn
+scipy
+soundfile
+termcolor
