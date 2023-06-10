@@ -14,7 +14,7 @@
 ## 🚩 简介
 一个基于声纹识别模型对音频数据集按说话人自动分类的数据集筛选辅助工具，仅需为每个说话人准备数条代表性的语音片段，可用于辅助 VITS/SoVITS/Diff-SVC/RVC/DDSP-SVC 等语音模型数据集的制作。
 
-基于 [yeyupiaoling/VoiceprintRecognition-Pytorch](https://github.com/yeyupiaoling/VoiceprintRecognition-Pytorch) 修改，增加了批量声纹识别功能，并能将识别结果保存为可导入 [2DIPW/audio_dataset_screener](https://github.com/2DIPW/audio_dataset_screener) 中进行进一步手工筛选的 JSON 工程文件。相比原项目删除了所有与模型训练相关的源码，故如需训练自己的模型请使用原项目。
+基于 [yeyupiaoling/VoiceprintRecognition-Pytorch](https://github.com/yeyupiaoling/VoiceprintRecognition-Pytorch) 修改，增加了批量声纹识别功能，优化了说话人的判定机制，并能将识别结果保存为可导入 [2DIPW/audio_dataset_screener](https://github.com/2DIPW/audio_dataset_screener) 中进行进一步手工筛选的 JSON 工程文件。相比原项目删除了所有与模型训练相关的源码，故如需训练自己的模型请使用原项目。
 
 此项目为实验性项目，不保证使用效果，仅供学习与交流，并非为生产环境准备。
 
