@@ -53,7 +53,7 @@ The quality of voiceprint recognition is directly related to the quality of the 
 - If you want to use the voiceprint recognition results for further manual screening by Audio Dataset Screener, the number of speakers should not exceed 5, otherwise speakers with serial numbers greater than 5 will be automatically ignored by Audio Dataset Screener.
 
     ```
-    input
+    labels
     ├───speaker1
     │   ├───xxx1-xxx1.wav
     │   ├───...

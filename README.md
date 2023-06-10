@@ -53,7 +53,7 @@ pip install -r requirements.txt
 - 如果你想将声纹识别结果用于 Audio Dataset Screener 的后续手工筛选，说话人不应超过5位，否则序号大于5的说话人会被 Audio Dataset Screener 自动忽略。
 
     ```
-    input
+    labels
     ├───speaker1
     │   ├───xxx1-xxx1.wav
     │   ├───...
