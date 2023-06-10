@@ -1,3 +1,4 @@
+# The original author is yeyupiaoling, modified by 2DIPW
 import os
 from io import BufferedReader
 
@@ -89,9 +90,10 @@ class MVectorPredictor:
         self.users_audio_path = []
         # 加载声纹库
         self.audio_db_path = label_path
-        if self.audio_db_path is not None:
-            # 加载声纹库中的声纹
-            self.__load_faces(self.audio_db_path)
+        #if self.audio_db_path is not None:
+        assert (self.audio_db_path is not None), 'Voice feature library path not found.'
+        # 加载声纹库中的声纹
+        self.__load_faces(self.audio_db_path)
 
     # 加载声纹库中的声纹
     def __load_faces(self, audio_db_path):
@@ -103,8 +105,8 @@ class MVectorPredictor:
             if not os.path.isdir(audio_dir): continue
             for file in os.listdir(audio_dir):
                 audios_path.append(os.path.join(audio_dir, file).replace('\\', '/'))
-        # 声纹库没数据就跳过
-        if len(audios_path) == 0: return
+        # 声纹库没数据就报错
+        assert (len(audios_path) > 0), "Voice feature library is empty."
         print("Loading voice feature library...")
         input_audios = []
         for audio_path in tqdm(audios_path):

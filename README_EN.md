@@ -12,7 +12,7 @@
 [简体中文](https://github.com/2DIPW/audio_dataset_vpr/blob/master/README.md) | English
 
 ## 🚩 Introduction
-A dataset screening tool that automatically classifies audio dataset by speaker based on the EcapaTdnn voiceprint recognition model. To use it, you just need to prepare several representative voice clips for each speaker. It can be used to assist the make of dataset for speech models such as VITS/SoVITS/Diff-SVC/RVC/DDSP-SVC.
+A dataset screening tool that automatically classifies audio dataset by speaker based on voiceprint recognition model. To use it, you just need to prepare several representative voice clips for each speaker. It can be used to assist the make of dataset for speech models such as VITS/SoVITS/Diff-SVC/RVC/DDSP-SVC.
 
 This project is modified by [yeyupiaoling/VoiceprintRecognition-Pytorch](https://github.com/yeyupiaoling/VoiceprintRecognition-Pytorch), which adds batch processing feature, and can save the recognition results as a [2DIPW/audio_dataset_screener]( https://github.com/2DIPW/audio_dataset_screener) JSON project file for further manual screening. Compared with the original project, all codes related to model training have been deleted, so if you need to train your own model, you should use the original project.
 

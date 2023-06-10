@@ -12,7 +12,7 @@
 简体中文 | [English](https://github.com/2DIPW/audio_dataset_vpr/blob/master/README_EN.md)
 
 ## 🚩 简介
-一个基于EcapaTdnn声纹识别模型对音频数据集按说话人自动分类的数据集筛选辅助工具，仅需为每个说话人准备数条代表性的语音片段，可用于辅助 VITS/SoVITS/Diff-SVC/RVC/DDSP-SVC 等语音模型数据集的制作。
+一个基于声纹识别模型对音频数据集按说话人自动分类的数据集筛选辅助工具，仅需为每个说话人准备数条代表性的语音片段，可用于辅助 VITS/SoVITS/Diff-SVC/RVC/DDSP-SVC 等语音模型数据集的制作。
 
 基于 [yeyupiaoling/VoiceprintRecognition-Pytorch](https://github.com/yeyupiaoling/VoiceprintRecognition-Pytorch) 修改，增加了批量声纹识别功能，并能将识别结果保存为可导入 [2DIPW/audio_dataset_screener](https://github.com/2DIPW/audio_dataset_screener) 中进行进一步手工筛选的 JSON 工程文件。相比原项目删除了所有与模型训练相关的源码，故如需训练自己的模型请使用原项目。
 
