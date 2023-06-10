@@ -5,6 +5,7 @@ from io import BufferedReader
 import numpy as np
 import torch
 import yaml
+from collections import Counter
 from sklearn.metrics.pairwise import cosine_similarity
 from tqdm import tqdm
 
@@ -44,7 +45,7 @@ class MVectorPredictor:
             os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
             self.device = torch.device("cpu")
         # 索引候选数量
-        self.cdd_num = 5
+        # self.cdd_num = 5
         self.threshold = threshold
         # 读取配置文件
         if isinstance(configs, str):
@@ -144,13 +145,14 @@ class MVectorPredictor:
             similarity = cosine_similarity(self.audio_feature, feature[np.newaxis, :]).squeeze()
             abs_similarity = np.abs(similarity)
             # 获取候选索引
-            if len(abs_similarity) < self.cdd_num:
-                candidate_idx = np.argpartition(abs_similarity, -len(abs_similarity))[-len(abs_similarity):]
-            else:
-                candidate_idx = np.argpartition(abs_similarity, -self.cdd_num)[-self.cdd_num:]
+            #if len(abs_similarity) < self.cdd_num:
+            #    candidate_idx = np.argpartition(abs_similarity, -len(abs_similarity))[-len(abs_similarity):]
+            #else:
+            #    candidate_idx = np.argpartition(abs_similarity, -self.cdd_num)[-self.cdd_num:]
             # 过滤低于阈值的索引
-            remove_idx = np.where(abs_similarity[candidate_idx] < self.threshold)
-            candidate_idx = np.delete(candidate_idx, remove_idx)
+            # remove_idx = np.where(abs_similarity < self.threshold)
+            # candidate_idx = np.delete(candidate_idx, remove_idx)
+            candidate_idx = np.where(abs_similarity >= self.threshold)
             # 获取标签最多的值
             candidate_label_list = list(np.array(self.users_name)[candidate_idx])
             if len(candidate_label_list) == 0:
@@ -159,8 +161,9 @@ class MVectorPredictor:
                 #max_label = max(candidate_label_list, key=candidate_label_list.count)
                 # 这里做出的修改是考虑到如果有多个说话人命中的特征片段数量一样，原代码将会判定为顺序最靠前的说话人
                 # 修改成下面的代码后，将会判定为相似度最大的说话人
-                max_count = max(candidate_label_list.count(label) for label in candidate_label_list)
-                max_labels = [label for label in candidate_label_list if candidate_label_list.count(label) == max_count]
+                counter = Counter(candidate_label_list)
+                max_count = max(counter.values())
+                max_labels = [elem for elem, count in counter.items() if count == max_count]
                 max_label_dict = {}
                 for max_label in max_labels:  # 对于每个命中的说话人
                     idx_for_max_label = [i for i, x in enumerate(self.users_name) if x == max_label]  # 取其命中的片段的索引
