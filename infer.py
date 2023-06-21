@@ -3,7 +3,6 @@ import os
 import json
 import shutil
 from datetime import datetime
-from scipy.io import wavfile
 from mvector.predict import MVectorPredictor
 
 
@@ -36,6 +35,8 @@ if __name__ == "__main__":
     parser.add_argument('-t', '--threshold', type=float, default=0.6, help="Threshold for judging compliance.")
     parser.add_argument('-i', '--input_path', type=str, default="input/", help="Path to input files.")
     parser.add_argument('-o', '--output_path', type=str, default="output/", help="Path to output files.")
+    parser.add_argument('-k', '--keep_unrecognized', action='store_true', default=False,
+                        help='Do not move unrecognized files.')
 
     args = parser.parse_args()
 
@@ -65,18 +66,21 @@ if __name__ == "__main__":
     result_dicts_list = []
 
     for i, file in enumerate(input_files):
-        sample_rate, audio_data = wavfile.read(file)
-        label, similarity = predictor.recognition(audio_data=audio_data, sample_rate=sample_rate)
-        if label:
+        try:
+            label, similarity = predictor.recognition(audio_data=file)
+            if label:
+                print(
+                    f"\033[32m[{i + 1}/{input_files_amount}]\033[0m \033[33m{os.path.basename(file)}\033[0m is recognized as speaker \033[31m{label}\033[0m, the max similarity is \033[34m{similarity}\033[0m.")
+                result_dicts_list.append(
+                    {"Filepath": file, "Label": labels_dict[label], "Similarity": float(similarity)})
+            else:
+                print(
+                    f"\033[32m[{i + 1}/{input_files_amount}]\033[0m \033[33m{os.path.basename(file)}\033[0m could not be recognized as any speaker.")
+                result_dicts_list.append(
+                    {"Filepath": file, "Label": 0, "Similarity": 0})
+        except Exception as e:
             print(
-                f"\033[32m[{i+1}/{input_files_amount}]\033[0m \033[33m{os.path.basename(file)}\033[0m is recognized as speaker \033[31m{label}\033[0m, the max similarity is \033[34m{similarity}\033[0m.")
-            result_dicts_list.append(
-                {"Filepath": file, "Label": labels_dict[label], "Similarity": float(similarity)})
-        else:
-            print(
-                f"\033[32m[{i+1}/{input_files_amount}]\033[0m \033[33m{os.path.basename(file)}\033[0m could not be recognized as any speaker.")
-            result_dicts_list.append(
-                {"Filepath": file, "Label": 0, "Similarity": 0})
+                f"\033[32m[{i + 1}/{input_files_amount}]\033[0m An error occurred while processing \033[33m{os.path.basename(file)}\033[0m : {e}")
 
     output_path_for_this_run = os.path.join(args.output_path, datetime.now().strftime("VPR_Result_%Y%m%d_%H%M%S"))
     if_not_mkdir(output_path_for_this_run)
@@ -84,12 +88,16 @@ if __name__ == "__main__":
 
     # Move input files to category folders
     print("Moving input files to category folders...")
-    folder_list_without_unrecognized = [os.path.abspath(os.path.join(output_path_for_this_run, label)) for label in labels_list]
-    folder_list = [os.path.abspath(os.path.join(output_path_for_this_run, "Unrecognized"))] + folder_list_without_unrecognized
+    folder_list_without_unrecognized = [os.path.abspath(os.path.join(output_path_for_this_run, label)) for label in
+                                        labels_list]
+    folder_list = [os.path.abspath(
+        os.path.join(output_path_for_this_run, "Unrecognized"))] + folder_list_without_unrecognized
 
     for folder in folder_list:
         if_not_mkdir(folder)
     for result in result_dicts_list:
+        if args.keep_unrecognized and result["Label"] == 0:
+            continue
         destination_folder = folder_list[result["Label"]]
         try:
             shutil.move(result["Filepath"], destination_folder)
@@ -99,5 +107,6 @@ if __name__ == "__main__":
 
     # Write result json file to output_path
     with open(json_path, "w") as f:
-        json.dump({"Labels": {str(i+1): folder for i, folder in enumerate(folder_list_without_unrecognized)}, "Files": result_dicts_list}, f, indent=4)
+        json.dump({"Labels": {str(i + 1): folder for i, folder in enumerate(folder_list_without_unrecognized)},
+                   "Files": result_dicts_list}, f, indent=4)
         print(f"Result json is saved as {json_path}")

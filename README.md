@@ -42,7 +42,7 @@ pip install -r requirements.txt
 默认参数下，你需要将模型文件`model.pt`、`model.state`、`optimizer.pt`及配置文件`config.yml`置于`model`目录。你也可以通过指定`-m`和`-c`参数读取其他路径下的模型及配置文件。
 
 - 你可以从 Hugging Face 下载我基于 [zhvoice](https://aistudio.baidu.com/aistudio/datasetdetail/133922) 数据集训练的 EcapaTdnn 模型：[2DIPW/VPR_zhvoice_EcapaTdnn](https://huggingface.co/2DIPW/VPR_zhvoice_EcapaTdnn/tree/main)
-- 或者下载[原项目作者训练的更多模型](https://github.com/yeyupiaoling/VoiceprintRecognition-Pytorch#%E6%A8%A1%E5%9E%8B%E4%B8%8B%E8%BD%BD)
+- 或者下载[原项目作者 yeyupiaoling 训练的更多模型](https://github.com/yeyupiaoling/VoiceprintRecognition-Pytorch#%E6%A8%A1%E5%9E%8B%E4%B8%8B%E8%BD%BD)
 - 或者基于原项目[训练自己的模型](https://github.com/yeyupiaoling/VoiceprintRecognition-Pytorch#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE)
 
 声纹识别模型的质量与识别效果直接相关，你可以自行尝试摸索最佳的模型。
@@ -78,6 +78,7 @@ pip install -r requirements.txt
     - `-t` | `--threshold`: 判定阈值，若置信度大于该值则认为特征相符。默认值：`0.6`
     - `-i` | `--input_path`: 存放待分类音频文件的目录。默认值：`input/`
     - `-o` | `--output_path`: 存放分类结果的目录。默认值：`output/`
+    - `-k` | `--keep_unrecognized`: 不移动未识别的音频文件。默认值：不启用
 
 - 识别结束后，输入的音频文件将会被移动至`output`目录下的以`VPR_Result_YYYYMMDD_HHMMSS`格式命名的目录中，识别为不同说话人的音频文件将会移动至对应说话人名称的目录，未被识别的音频文件会移至`Unrecognized`文件夹。
 - 识别结果也将保存为`result.json`文件，可使用 Audio Dataset Screener 导入进行进一步的手工筛选。

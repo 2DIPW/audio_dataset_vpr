@@ -42,7 +42,7 @@ pip install -r requirements.txt
 Under the default parameters, you need to put the model files `model.pt`, `model.state`, `optimizer.pt` and the configuration file `config.yml` in the `model` directory. You can also use model and configuration files in other paths by specifying `-m` and `-c` parameters.
 
 - You can download the EcapaTdnn model I trained on [zhvoice](https://aistudio.baidu.com/aistudio/datasetdetail/133922) dataset from Hugging Face: [2DIPW/VPR_zhvoice_EcapaTdnn](https://huggingface.co/2DIPW/VPR_zhvoice_EcapaTdnn/tree/main)
-- Or download [more models trained by the original project author](https://github.com/yeyupiaoling/VoiceprintRecognition-Pytorch#%E6%A8%A1%E5%9E%8B%E4%B8%8B%E8%BD%BD)
+- Or download [more models trained by the original project author yeyupiaoling](https://github.com/yeyupiaoling/VoiceprintRecognition-Pytorch#%E6%A8%A1%E5%9E%8B%E4%B8%8B%E8%BD%BD)
 - Or [train your own model using the original project](https://github.com/yeyupiaoling/VoiceprintRecognition-Pytorch#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE)
 
 The quality of voiceprint recognition is directly related to the quality of the model, you can try to find the best model by yourself.
@@ -78,6 +78,7 @@ The quality of voiceprint recognition is directly related to the quality of the 
     - `-t` | `--threshold`: Threshold for judging compliance. Default: `0.6`
     - `-i` | `--input_path`: Path to input files. Default: `input/`
     - `-o` | `--output_path`: Path to output files. Default: `output/`
+    - `-k` | `--keep_unrecognized`: Do not move unrecognized files. Default: Disabled
 
 - After the process is complete, the input audio files will be moved to the directory named in the `VPR_Result_YYYYMMDD_HHMMSS` format in the `output` directory, and the audio files recognized as different speakers will be moved to the directories named after the speakers, unrecognized audio files will be moved to the `Unrecognized` folder.
 - The recognition results will also be saved as a `result.json` file, which can be imported using Audio Dataset Screener for further manual screening.
